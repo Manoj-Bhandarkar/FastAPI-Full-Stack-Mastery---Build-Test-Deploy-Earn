@@ -31,30 +31,30 @@ app = FastAPI()
 
 #----------------------------------------------------------------------
 # Parameter with Type
-#----------------------------------------------------------------------
-@app.get("/product/{product_id}")
-async def single_product(product_id:int):     # only int accepted
-    return {"response":"Single Data Fetched", "product_id": product_id}
+# #----------------------------------------------------------------------
+# @app.get("/product/{product_id}")
+# async def single_product(product_id:int):     # only int accepted
+#     return {"response":"Single Data Fetched", "product_id": product_id}
 
-@app.get("/product/{product_title}")      # string accepted + int also act string
-async def singlee_product(product_title:str):
-    return {"response":"Single Data Fetched", "product_title": product_title}
-----------------------------------------------------------------------
-# Predefined values with enum 
-----------------------------------------------------------------------
-# Define an Enum class with allowed product categories
-class ProductCategory(str, Enum):
-    books = "books"
-    clothing = "clothing"
-    electronics = "electronics"
+# @app.get("/product/{product_title}")      # string accepted + int also act string
+# async def singlee_product(product_title:str):
+#     return {"response":"Single Data Fetched", "product_title": product_title}
+# #----------------------------------------------------------------------
+# # Predefined values with enum 
+# #----------------------------------------------------------------------
+# # Define an Enum class with allowed product categories
+# class ProductCategory(str, Enum):
+#     books = "books"
+#     clothing = "clothing"
+#     electronics = "electronics"
 
-# Use the Enum as the type for the path parameter
-@app.get("/product/{category}")
-async def get_products(category:ProductCategory):
-    return {"response": "Products fetched", "category": category}
-------------------------------------------------------------------------
+# # Use the Enum as the type for the path parameter
+# @app.get("/product/{category}")
+# async def get_products(category:ProductCategory):
+#     return {"response": "Products fetched", "category": category}
+#------------------------------------------------------------------------
 # Working with Python enumerations
-------------------------------------------------------------------------
+#------------------------------------------------------------------------
 class ProductCategory(str, Enum):
     books = "books"
     clothing = "clothing"
