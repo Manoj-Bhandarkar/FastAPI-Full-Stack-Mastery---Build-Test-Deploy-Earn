@@ -1,9 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 
 app = FastAPI()
 
 # Single Query Parameter
-@app.get("/product")
+@app.get("/product",status_code=status.HTTP_200_OK)
 async def product(category:str):
   return {"status":"OK", "category":category}
 
