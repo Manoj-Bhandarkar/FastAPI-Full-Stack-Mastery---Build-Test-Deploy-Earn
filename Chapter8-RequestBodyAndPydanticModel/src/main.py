@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from pydantic import BaseModel
 app = FastAPI()
+from typing import Annotated
 
 ## Without Pydantic
 ## Create or Insert Data
@@ -53,3 +54,51 @@ async def update_product_requestbody_with_pathparam(product_id: int, new_updated
 @app.put("/products6/{product_id}")
 async def update_product_with_queryparam(product_id: int, new_updated_product: Product_pydandic, discount: float | None = None):
     return {"product_id": product_id, "new_updated_product": new_updated_product, "discount": discount}
+#====================================================================================================
+#---------------------------------
+## Multiple Request Body Parameters
+#---------------------------------
+class Pydantic_Product(BaseModel):
+  name: str
+  price:float
+  stock: int | None = None
+class Pydantic_Seller(BaseModel):
+  username: str
+  full_name: str | None = None
+
+@app.post("/product7")
+async def create_product_with_muli_pydantic(product: Pydantic_Product, seller:Pydantic_Seller):
+  return {"product": product, "seller":seller}
+
+#---------------------------------
+## Make Body Optional
+#---------------------------------
+@app.post("/product8")
+async def create_product_pydantic_optional(product: Pydantic_Product, seller:Pydantic_Seller | None = None):
+  return {"product": product, "seller":seller}
+
+#---------------------------------
+## Singular values in body
+#---------------------------------
+@app.post("/product9")
+async def create_product_singleValue_reqbody(
+  product: Pydantic_Product, 
+  seller:Pydantic_Seller, 
+  sec_key: Annotated[str, Body()]
+  ):
+  return {"product": product, "seller":seller, "sec_key":sec_key}
+
+#---------------------------------
+## Embed a single body parameter
+#---------------------------------
+# Without Embed
+@app.post("/product10")
+async def create_product_Without_Embed(product: Pydantic_Product):
+  return product
+
+#---------------------------------
+## With Embed
+#---------------------------------
+@app.post("/product11")
+async def create_product_With_Embed(product: Annotated[Pydantic_Product, Body(embed=True)]):
+  return product
