@@ -66,6 +66,9 @@ class Pydantic_Seller(BaseModel):
   username: str
   full_name: str | None = None
 
+#---------------------------------
+## Make Two Request Body
+#---------------------------------
 @app.post("/product7")
 async def create_product_with_muli_pydantic(product: Pydantic_Product, seller:Pydantic_Seller):
   return {"product": product, "seller":seller}
@@ -78,7 +81,7 @@ async def create_product_pydantic_optional(product: Pydantic_Product, seller:Pyd
   return {"product": product, "seller":seller}
 
 #---------------------------------
-## Singular values in body
+## Add Extra Singular values in body
 #---------------------------------
 @app.post("/product9")
 async def create_product_singleValue_reqbody(
