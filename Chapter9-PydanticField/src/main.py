@@ -48,7 +48,7 @@ class Category(BaseModel):
     )
   
 ## Model which will use Submodel
-class Product(BaseModel):
+class Product_Nested(BaseModel):
     name: str = Field(
         title="Product Name",
         description="The name of the product",
@@ -73,13 +73,13 @@ class Product(BaseModel):
     )
 
 @app.post("/product2")
-async def create_product_nested_body_model(product: Product):
+async def create_product_nested_body_model(product: Product_Nested):
     return product
 
 #-----------------------------
 ## Attributes with lists of submodels
 #-----------------------------
-class Category(BaseModel):
+class Category_list(BaseModel):
     name: str = Field(
         title="Category Name",
         description="The name of the product category",
@@ -111,7 +111,7 @@ class Product(BaseModel):
         title="Stock Quantity",
         description="Number of items in stock, must be non-negative"
     )
-    category: list[Category] | None = Field(
+    category: list[Category_list] | None = Field(
        default=None,
        title="Product Category",
        description="The category to which the product belongs"
@@ -119,4 +119,41 @@ class Product(BaseModel):
 
 @app.post("/product3")
 async def create_product_list_model(product: Product):
+    return product
+#=======================================================================
+#-----------------------------
+## Field-level Examples - using Example - for understand what value expected in json 
+#-----------------------------
+class Product_Example(BaseModel):
+    name: str = Field(examples=["Moto E"])
+    price: float = Field(examples=[23.56])
+    stock: int | None = Field(default=None, examples=[43])
+
+@app.post("/product4")
+async def create_product_field_exaple_example(product: Product_Example):
+    return product
+
+#-----------------------------
+## Field-level Examples - Using Pydantic’s json_schema_extra - for understand what value expected in json
+#-----------------------------
+
+class Product_json_scheme_extra(BaseModel):
+  name: str
+  price: float
+  stock: int | None = None
+
+  model_config = {
+    "json_schema_extra": {
+      "examples": [
+        {
+          "name": "Moto E",
+          "price": 34.56,
+          "stock": 45
+        }
+      ]
+    }
+  }
+
+@app.post("/product5")
+async def create_product_field_exaple_json_schema_extra(product: Product_json_scheme_extra):
     return product
