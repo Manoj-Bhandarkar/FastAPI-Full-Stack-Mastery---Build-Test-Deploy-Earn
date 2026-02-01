@@ -57,3 +57,25 @@ async def get_products4():
 @app.post("/products5", response_model=Product)
 async def create_product5(product: Product):
   return {"id": 2, "name": "Redmi 4", "price": 55.33, "stock": 7}
+
+#-------------------------------------
+## Inhertance with Response Model 
+#-------------------------------------
+class BaseUser(BaseModel):
+    username: str
+    full_name: str | None = None
+
+class UserIn(BaseUser):
+    password: str
+
+@app.post("/users7", response_model=BaseUser)
+async def create_user7(user: UserIn):
+  return user
+
+@app.post("/products8", response_model=Product)
+async def create_product8(product: Product) -> Any:
+  return product
+
+@app.post("/products9", response_model=None)
+async def create_product9(product: Product) -> Any:
+  return product
