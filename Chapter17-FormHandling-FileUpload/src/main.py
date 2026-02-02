@@ -24,6 +24,11 @@ async def main():
                 <input name="file" type="file">
                 <input type="submit" value="Upload">
             </form>
+            <h2>Multiple Files Upload (UploadFile)</h2>
+            <form action="/uploadfiles/" enctype="multipart/form-data" method="post">
+                <input name="files" type="file" multiple>
+                <input type="submit" value="Upload">
+            </form>
         </body>
     </html>
     """
@@ -69,3 +74,17 @@ async def create_upload_file(file: Annotated[UploadFile | None, File()] = None):
     with open(save_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
     return {"filename": file.filename, "content_type": file.content_type}
+
+#-------------------------------
+## Multi File Upload
+#-------------------------------
+@app.post("/uploadfiles/")
+async def create_upload_file_multi(files: Annotated[list[UploadFile], File()]):
+    save_files = []
+    os.makedirs("uploads", exist_ok=True)
+    for file in files:
+        save_path = f"uploads/{file.filename}"
+        with open(save_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        save_files.append({"filename": file.filename})
+    return save_files
