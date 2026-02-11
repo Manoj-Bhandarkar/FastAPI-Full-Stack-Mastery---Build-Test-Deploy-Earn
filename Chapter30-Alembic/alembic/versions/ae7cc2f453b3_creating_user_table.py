@@ -24,6 +24,7 @@ def upgrade() -> None:
     sa.Column("id", sa.INTEGER, primary_key=True),
     sa.Column("name", sa.String(50), nullable=False),
     sa.Column("email", sa.String, nullable=False),
+    sa.Column("phone", sa.Integer, nullable=False),
     )
 
 def downgrade() -> None:
