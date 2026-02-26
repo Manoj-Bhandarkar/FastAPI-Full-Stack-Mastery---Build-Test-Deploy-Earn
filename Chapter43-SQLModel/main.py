@@ -1,7 +1,8 @@
 from db import create_tables
+from models import User, Profile, Address, UserAddressLink, Post
 from services import *
 
-# create_tables()
+create_tables()
 
 # new_user = create_user("sonam", "sonam@example.com")
 # print(new_user)

@@ -1,5 +1,7 @@
 from sqlmodel import Field, SQLModel
-
+#-----------------
+# Connecting Table
+#-----------------
 class UserAddressLink(SQLModel, table=True):
   user_id : int = Field(foreign_key="user.id", primary_key=True)
   address_id : int = Field(foreign_key="address.id", primary_key=True)
