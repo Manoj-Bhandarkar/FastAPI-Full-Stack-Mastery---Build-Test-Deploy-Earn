@@ -1,31 +1,27 @@
 from sqlmodel import Session, select
 from app.task.models import Task, TaskUpdate, TaskPatch, TaskOut
-from app.db.config import engine
 from fastapi import HTTPException
 
-def create_task(new_task: Task) -> TaskOut:
+def create_task(session: Session, new_task: Task) -> TaskOut:
   task = Task(title=new_task.title, content=new_task.content)
-  with Session(engine) as session:
-    session.add(task)
-    session.commit()
-    session.refresh(task)
-    return task
+  session.add(task)
+  session.commit()
+  session.refresh(task)
+  return task
   
-def get_all_tasks() -> list[TaskOut]:
-  with Session(engine) as session:
+def get_all_tasks(session: Session) -> list[TaskOut]:
     stmt = select(Task)
     tasks = session.exec(stmt)
     return tasks.all()
   
-def get_task_by_id(task_id: int) -> TaskOut:
-  with Session(engine) as session:
+def get_task_by_id(session: Session, task_id: int) -> TaskOut:
     task = session.get(Task, task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
     return task
   
-def update_task(task_id: int, new_task: TaskUpdate) -> TaskOut:
-    with Session(engine) as session:
+def update_task(session: Session, task_id: int, new_task: TaskUpdate) -> TaskOut:
+
         task = session.get(Task, task_id)
         if not task:
             raise HTTPException(status_code=404, detail="Task not found")
@@ -36,8 +32,7 @@ def update_task(task_id: int, new_task: TaskUpdate) -> TaskOut:
         session.refresh(task)
         return task
     
-def patch_task(task_id: int, new_task: TaskPatch) -> TaskOut:
-  with Session(engine) as session:
+def patch_task(session: Session, task_id: int, new_task: TaskPatch) -> TaskOut:
     task = session.get(Task, task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -48,8 +43,7 @@ def patch_task(task_id: int, new_task: TaskPatch) -> TaskOut:
     session.refresh(task)
     return task
   
-def delete_task(task_id: int):
-  with Session(engine) as session:
+def delete_task(session: Session, task_id: int):
     task = session.get(Task, task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
