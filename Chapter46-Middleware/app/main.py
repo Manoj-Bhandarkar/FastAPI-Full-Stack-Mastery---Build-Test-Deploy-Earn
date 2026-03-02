@@ -1,10 +1,11 @@
 from fastapi import FastAPI
-from app.middlewares import my_first_middleware, my_second_middleware
+from app.middlewares import users_only_middleware, product_only_middleware, my_middleware
 
 app = FastAPI()
 
-app.middleware("http")(my_second_middleware)
-app.middleware("http")(my_first_middleware)
+app.middleware("http")(product_only_middleware)
+app.middleware("http")(users_only_middleware)
+app.middleware("http")(my_middleware)
 
 
 @app.get("/users")
