@@ -2,8 +2,12 @@ from fastapi import FastAPI
 from app.middlewares import users_only_middleware, product_only_middleware, my_middleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from app.middlewares import CustomLoggingMiddleware
 
 app = FastAPI()
+
+#custom middleware
+app.add_middleware(CustomLoggingMiddleware, prefix="CUSTOM_LOG")
 
 # built-in middleware
 app.add_middleware(HTTPSRedirectMiddleware)
@@ -12,7 +16,6 @@ app.add_middleware(HTTPSRedirectMiddleware)
 app.middleware("http")(product_only_middleware)
 app.middleware("http")(users_only_middleware)
 app.middleware("http")(my_middleware)
-
 
 @app.get("/users")
 async def get_users():

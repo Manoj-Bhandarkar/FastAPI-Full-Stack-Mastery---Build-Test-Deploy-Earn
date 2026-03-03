@@ -28,3 +28,12 @@ async def my_middleware(request: Request, call_next):
     print("My Middleware: After processing the request, before returning response")
     return response
    
+class CustomLoggingMiddleware:
+  def __init__(self, app, prefix="LOG"):
+    self.app = app
+    self.prefix = prefix
+
+  async def __call__(self, scope, receive, send):
+    print(f"{self.prefix}: Before processing request (scope: {scope['type']})")
+    await self.app(scope, receive, send)
+    print(f"{self.prefix}: After processing request")
