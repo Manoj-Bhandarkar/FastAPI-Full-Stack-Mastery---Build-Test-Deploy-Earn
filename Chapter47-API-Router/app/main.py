@@ -4,10 +4,7 @@ from app.product.routers import router as product_routers
 
 app = FastAPI()
 
-# app.include_router(user_routers, tags=["users"])
-# app.include_router(product_routers, tags=["products"])
-
-app.include_router(user_routers)
+app.include_router(user_routers, prefix="/users")
 app.include_router(product_routers)
 
 @app.get("/")
