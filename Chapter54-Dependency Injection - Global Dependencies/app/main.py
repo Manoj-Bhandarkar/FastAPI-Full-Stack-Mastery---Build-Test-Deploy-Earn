@@ -1,10 +1,17 @@
-from fastapi import FastAPI, Depends
-from app.routers import router, verify_token
+from fastapi import FastAPI, Depends, Header, HTTPException
+from typing import Annotated
 
-app = FastAPI()
+# Global Dependencies
+async def verify_token(x_token: Annotated[str, Header()]):
+  if x_token != "my-secret-token":
+    raise HTTPException (status_code=400, detail="X-Token header invalid")
 
-# Dependencies for a Group of Path Operations
-# app.include_router(router)
+app = FastAPI(dependencies=[Depends(verify_token)])
 
-app.include_router(router, dependencies=[Depends(verify_token)])
+@app.get("/items")
+async def read_items():
+    return {"data": "All Items"}
 
+@app.get("/products")
+async def read_products():
+    return {"data": "All Products"}
