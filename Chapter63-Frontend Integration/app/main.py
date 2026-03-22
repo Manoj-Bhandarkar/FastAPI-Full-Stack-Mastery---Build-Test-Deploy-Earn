@@ -11,3 +11,12 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+@app.post("/products", response_model=ProductOut)
+def product_create(session: SessionDep, new_product: ProductCreate):
+   product = create_product(session, new_product)
+   return product
+
+@app.get("/products", response_model=list[ProductOut])
+def all_products(session: SessionDep):
+  products = get_all_products(session)
+  return products
