@@ -21,3 +21,7 @@ template = Jinja2Templates(directory="app/templates")
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
     return template.TemplateResponse("index.html", {"request": request})
+
+@app.get("/form", response_class=HTMLResponse)
+def load_form(request: Request):
+    return template.TemplateResponse("product_form.html", {"request": request})
