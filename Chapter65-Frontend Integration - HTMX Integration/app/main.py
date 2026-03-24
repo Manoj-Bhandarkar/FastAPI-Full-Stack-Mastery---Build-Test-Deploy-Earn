@@ -25,3 +25,9 @@ def home(request: Request):
 @app.get("/form", response_class=HTMLResponse)
 def load_form(request: Request):
     return template.TemplateResponse("product_form.html", {"request": request})
+
+@app.get("/products/list", response_class=HTMLResponse)
+def product_list(request: Request, session: SessionDep):
+    products = get_all_products(session)
+    return template.TemplateResponse("product_list.html", {"request": request, "products": products})
+
