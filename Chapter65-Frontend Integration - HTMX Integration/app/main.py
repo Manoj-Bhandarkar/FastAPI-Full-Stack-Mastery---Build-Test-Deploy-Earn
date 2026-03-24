@@ -31,3 +31,9 @@ def product_list(request: Request, session: SessionDep):
     products = get_all_products(session)
     return template.TemplateResponse("product_list.html", {"request": request, "products": products})
 
+@app.post("/products", response_class=HTMLResponse)
+def product_create(request: Request, session: SessionDep, title: str = Form(...), description: str = Form(...)):
+    product_data = ProductCreate(title=title, description=description)
+    create_product(session, product_data)
+    products = get_all_products(session)
+    return template.TemplateResponse("product_list.html", {"request": request, "products": products})
