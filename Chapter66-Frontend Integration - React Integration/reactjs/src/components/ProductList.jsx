@@ -12,6 +12,7 @@ const ProductList = () => {
     fetchProducts();
   }, []);
   return (
+    
     <div>
       <h1>Product List</h1>
       <ProductForm onProductAdded={(product) => setProducts([...products, product])} />
